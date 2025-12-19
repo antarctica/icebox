@@ -18,11 +18,11 @@ This application enables researchers to:
 - Track meteorological data (temperature, wind, cloud cover)
 - Document ice conditions and concentrations
 - Manage observer rosters with hourly assignments
-- Analyze and filter observation data
+- Analyse and filter observation data
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-Originally developed by the Australian Antarctic Division, this is a ground-up rewrite using modern web technologies while preserving all original functionality.`
+The original IceBox was developed by the Australian Antarctic Division. TwIceBox is a ground-up rewrite by the British Antarctic Survey using modern web technologies while preserving all original functionality.`
   },
   {
     title: 'Getting Started',
@@ -213,13 +213,13 @@ Example: R3 means ridged ice covering 20-30% of the surface`,
       },
       {
         title: 'Brown Ice',
-        content: `Brown ice refers to ice coloration caused by algal communities in different layers of the ice:
+        content: `Brown ice refers to ice colouration caused by algal communities in different layers of the ice:
 
 - **Surface** - Algae on top of the ice
 - **Internal/Middle** - Algae within the ice structure
 - **Bottom** - Algae on the underside of the ice
 
-Brown ice is measured by the visual coloration intensity of each layer.`,
+Brown ice is measured by the visual colouration intensity of each layer.`,
         subsections: [
           {
             title: 'Reference Photography',
@@ -293,7 +293,7 @@ To export:
 
 CSV Format Requirements:
 - Headers must match the expected column names
-- Date/Time must be in ISO format or a recognizable date format
+- Date/Time must be in ISO format or a recognisable date format
 - Latitude and Longitude are required for each observation
 - Other fields are optional but should use valid ASPeCt codes when provided`
       }
@@ -327,7 +327,9 @@ CSV Format Requirements:
 
 Allison, I • Ackley, S • Calder, D • Canterbury, G • Delille, D • Fahrbach, E • Gormly, P • Haas, C • Haddock, P • Heil, P • Kosloff, P • Lytle, V • Massom, R • Monselesan, D • Reeves, R • Ushio, S • Worby, A
 
-TwIceBox is a modernized version of IceBox, originally developed for the Australian Antarctic Division.
+**TwIceBox** is developed and maintained by the British Antarctic Survey.
+
+The original **IceBox** application was developed by the Australian Antarctic Division.
 
 The ASPeCt protocol is maintained by the Antarctic Sea Ice Processes and Climate (ASPeCt) program.`
   }
