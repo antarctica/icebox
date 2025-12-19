@@ -9,13 +9,27 @@ export enum SyncStatus {
   STALE = 4,
 }
 
-// Ice observation within a cruise observation
+// Rostered person for observer assignments
+export interface RosteredPerson {
+  name: string;
+  contact?: string;
+  rostered_hours: string[]; // Array of hours (0-23) when this person is on duty
+}
+
+// Ice observation within a cruise observation (primary, secondary, or tertiary)
 export interface IceObservation {
-  ice_type: string;
-  ice_concentration: number;
-  thickness_type: string;
-  floe_size: string;
-  topography: string;
+  ice_concentration: number;  // Concentration in tenths
+  ice_type: string;            // Ice type code
+  ice_thickness: string;       // Thickness code/range
+  floe_size: string;          // Floe size code
+  topography: string;         // Topography type and coverage
+  snow_type?: string;         // Snow type code
+  snow_thickness?: string;    // Snow thickness code
+  brown_ice?: string;         // Brown ice indicator
+  melt_pond_coverage?: number; // Melt pond areal coverage
+  melt_pond_depth?: number;   // Melt pond depth
+  melt_pond_length_1?: number; // Melt pond length 1
+  melt_pond_length_2?: number; // Melt pond length 2
 }
 
 // Main Cruise interface
@@ -33,7 +47,7 @@ export interface Cruise {
   creator?: number;
   start_date: Date;
   end_date: Date;
-  rostered_persons?: string[];
+  rostered_persons?: RosteredPerson[];
   measurement_reference?: string;
 }
 
@@ -50,7 +64,11 @@ export interface CruiseObservation {
   longitude: number;
   total_ice_concentration?: number;
   open_water_type?: string;
-  ice_observations?: IceObservation[];
+  // Ice categories (primary, secondary, tertiary)
+  primary_ice?: IceObservation;
+  secondary_ice?: IceObservation;
+  tertiary_ice?: IceObservation;
+  // Meteorological observations
   water_temp?: number;
   air_temp?: number;
   wind_speed?: number;
@@ -94,16 +112,17 @@ export function makeBlankObservation(cruiseId: string): Partial<CruiseObservatio
     syncStatus: SyncStatus.LOCAL,
     localChanges: 0,
     entry_datetime: new Date(),
-    ice_observations: [],
   };
 }
 
 export function makeBlankIceObservation(): IceObservation {
   return {
-    ice_type: '',
     ice_concentration: 0,
-    thickness_type: '',
+    ice_type: '',
+    ice_thickness: '',
     floe_size: '',
     topography: '',
+    snow_type: '',
+    snow_thickness: '',
   };
 }

@@ -5,6 +5,7 @@ import { CruiseDetail } from './pages/CruiseDetail';
 import { CruiseObservations } from './pages/CruiseObservations';
 import { AnalysisFilter } from './pages/AnalysisFilter';
 import { Import } from './pages/Import';
+import { Documentation } from './pages/Documentation';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="cruise/:cruiseId/edit" element={<CruiseDetail />} />
           <Route path="analysis" element={<AnalysisFilter />} />
           <Route path="import" element={<Import />} />
+          <Route path="docs" element={<Documentation />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

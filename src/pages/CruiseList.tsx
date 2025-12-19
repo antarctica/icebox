@@ -52,7 +52,7 @@ export function CruiseList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading cruises...</div>
+        <div className="text-gray-400">Loading cruises...</div>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function CruiseList() {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Cruises</h2>
+        <h2 className="text-3xl font-bold text-white">Cruises</h2>
         <Link
           to="/cruise/create"
           className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -73,10 +73,10 @@ export function CruiseList() {
 
       {/* Cruise List */}
       {cruises.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <Ship className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No cruises yet</h3>
-          <p className="text-gray-500 mb-6">Create your first cruise to start recording observations</p>
+        <div className="bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <Ship className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-200 mb-2">No cruises yet</h3>
+          <p className="text-gray-400 mb-6">Create your first cruise to start recording observations</p>
           <Link
             to="/cruise/create"
             className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
@@ -90,14 +90,14 @@ export function CruiseList() {
           {cruises.map((cruise) => (
             <div
               key={cruise.uuid}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
+              className="bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 className="text-lg font-semibold text-white mb-1">
                     {cruise.name}
                   </h3>
-                  <div className="text-sm text-gray-600 space-y-1">
+                  <div className="text-sm text-gray-400 space-y-1">
                     <div className="flex items-center space-x-2">
                       <Ship className="h-4 w-4" />
                       <span>{cruise.voyage_vessel || 'Unknown vessel'}</span>
@@ -113,8 +113,8 @@ export function CruiseList() {
                 </div>
               </div>
 
-              <div className="border-t pt-3 mt-3">
-                <div className="text-sm text-gray-600 mb-3">
+              <div className="border-t border-gray-700 pt-3 mt-3">
+                <div className="text-sm text-gray-400 mb-3">
                   <span className="font-medium">{observationCounts[cruise.uuid] || 0}</span>{' '}
                   observations
                 </div>
@@ -129,13 +129,13 @@ export function CruiseList() {
                   </Link>
                   <Link
                     to={`/cruise/${cruise.uuid}/edit`}
-                    className="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded text-sm transition-colors"
+                    className="flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 rounded text-sm transition-colors"
                   >
                     <Edit2 className="h-4 w-4" />
                   </Link>
                   <button
                     onClick={() => handleDelete(cruise.uuid)}
-                    className="flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded text-sm transition-colors"
+                    className="flex items-center justify-center bg-red-900 hover:bg-red-800 text-red-200 px-3 py-2 rounded text-sm transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

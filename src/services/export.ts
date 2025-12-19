@@ -12,6 +12,25 @@ export function exportToCsv(cruise: Cruise, observations: CruiseObservation[]): 
     'Longitude',
     'Ice Concentration (%)',
     'Open Water Type',
+    // Primary Ice
+    'Primary Ice Conc',
+    'Primary Ice Type',
+    'Primary Ice Thickness',
+    'Primary Floe Size',
+    'Primary Topography',
+    // Secondary Ice
+    'Secondary Ice Conc',
+    'Secondary Ice Type',
+    'Secondary Ice Thickness',
+    'Secondary Floe Size',
+    'Secondary Topography',
+    // Tertiary Ice
+    'Tertiary Ice Conc',
+    'Tertiary Ice Type',
+    'Tertiary Ice Thickness',
+    'Tertiary Floe Size',
+    'Tertiary Topography',
+    // Met data
     'Air Temp (°C)',
     'Water Temp (°C)',
     'Wind Speed (m/s)',
@@ -30,6 +49,25 @@ export function exportToCsv(cruise: Cruise, observations: CruiseObservation[]): 
     obs.longitude.toFixed(6),
     obs.total_ice_concentration ?? '',
     obs.open_water_type ?? '',
+    // Primary Ice
+    obs.primary_ice?.ice_concentration ?? '',
+    obs.primary_ice?.ice_type ?? '',
+    obs.primary_ice?.ice_thickness ?? '',
+    obs.primary_ice?.floe_size ?? '',
+    obs.primary_ice?.topography ?? '',
+    // Secondary Ice
+    obs.secondary_ice?.ice_concentration ?? '',
+    obs.secondary_ice?.ice_type ?? '',
+    obs.secondary_ice?.ice_thickness ?? '',
+    obs.secondary_ice?.floe_size ?? '',
+    obs.secondary_ice?.topography ?? '',
+    // Tertiary Ice
+    obs.tertiary_ice?.ice_concentration ?? '',
+    obs.tertiary_ice?.ice_type ?? '',
+    obs.tertiary_ice?.ice_thickness ?? '',
+    obs.tertiary_ice?.floe_size ?? '',
+    obs.tertiary_ice?.topography ?? '',
+    // Met data
     obs.air_temp ?? '',
     obs.water_temp ?? '',
     obs.wind_speed ?? '',
@@ -74,6 +112,21 @@ export function exportToAspect(cruise: Cruise, observations: CruiseObservation[]
     
     if (obs.total_ice_concentration !== undefined) {
       lines.push(`Total Ice Concentration: ${obs.total_ice_concentration}%`);
+    }
+    
+    // Primary Ice
+    if (obs.primary_ice) {
+      lines.push(`Primary Ice: ${obs.primary_ice.ice_concentration}/10 - ${obs.primary_ice.ice_type || 'N/A'} - ${obs.primary_ice.ice_thickness || 'N/A'} - ${obs.primary_ice.floe_size || 'N/A'} - ${obs.primary_ice.topography || 'N/A'}`);
+    }
+    
+    // Secondary Ice
+    if (obs.secondary_ice) {
+      lines.push(`Secondary Ice: ${obs.secondary_ice.ice_concentration}/10 - ${obs.secondary_ice.ice_type || 'N/A'} - ${obs.secondary_ice.ice_thickness || 'N/A'} - ${obs.secondary_ice.floe_size || 'N/A'} - ${obs.secondary_ice.topography || 'N/A'}`);
+    }
+    
+    // Tertiary Ice
+    if (obs.tertiary_ice) {
+      lines.push(`Tertiary Ice: ${obs.tertiary_ice.ice_concentration}/10 - ${obs.tertiary_ice.ice_type || 'N/A'} - ${obs.tertiary_ice.ice_thickness || 'N/A'} - ${obs.tertiary_ice.floe_size || 'N/A'} - ${obs.tertiary_ice.topography || 'N/A'}`);
     }
     
     if (obs.air_temp !== undefined) {

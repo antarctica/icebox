@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, MapPin, Thermometer, Wind, Download, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, MapPin, Thermometer, Wind, Download, ChevronDown, Users } from 'lucide-react';
 import { cruiseAPI, observationAPI } from '../db/api';
 import type { Cruise, CruiseObservation } from '../db/database';
 import { format } from 'date-fns';
 import { ObservationModal } from '../components/ObservationModal';
 import { exportToCsv, exportToAspect, downloadFile, generateFilename } from '../services/export';
+
+type TabType = 'observations' | 'roster';
 
 export function CruiseObservations() {
   const { cruiseId } = useParams();
@@ -15,6 +17,7 @@ export function CruiseObservations() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingObservation, setEditingObservation] = useState<CruiseObservation | null>(null);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>('observations');
 
   useEffect(() => {
     loadData();
@@ -99,7 +102,7 @@ export function CruiseObservations() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-400">Loading...</div>
       </div>
     );
   }
@@ -107,8 +110,8 @@ export function CruiseObservations() {
   if (!cruise) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Cruise not found</p>
-        <Link to="/" className="text-blue-600 hover:text-blue-700 mt-4 inline-block">
+        <p className="text-gray-400">Cruise not found</p>
+        <Link to="/" className="text-blue-400 hover:text-blue-300 mt-4 inline-block">
           Back to Cruises
         </Link>
       </div>
@@ -121,7 +124,7 @@ export function CruiseObservations() {
       <div className="mb-6">
         <Link
           to="/"
-          className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 mb-4"
+          className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 mb-4"
         >
           <ArrowLeft className="h-5 w-5" />
           <span>Back to Cruises</span>
@@ -129,8 +132,8 @@ export function CruiseObservations() {
         
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">{cruise.name}</h2>
-            <div className="text-sm text-gray-600 space-y-1">
+            <h2 className="text-3xl font-bold text-white mb-2">{cruise.name}</h2>
+            <div className="text-sm text-gray-400 space-y-1">
               <p>
                 <span className="font-medium">Leader:</span> {cruise.voyage_leader}
               </p>
@@ -152,7 +155,7 @@ export function CruiseObservations() {
               <div className="relative export-menu-container">
                 <button
                   onClick={() => setExportMenuOpen(!exportMenuOpen)}
-                  className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                  className="flex items-center space-x-2 px-4 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors text-sm text-gray-300"
                 >
                   <Download className="h-4 w-4" />
                   <span>Export</span>
@@ -160,16 +163,16 @@ export function CruiseObservations() {
                 </button>
                 
                 {exportMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-10">
                     <button
                       onClick={handleExportCsv}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors text-sm text-gray-300"
                     >
                       Export as CSV
                     </button>
                     <button
                       onClick={handleExportAspect}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors text-sm"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors text-sm text-gray-300"
                     >
                       Export as ASPECT
                     </button>
@@ -180,7 +183,7 @@ export function CruiseObservations() {
             
             <Link
               to={`/cruise/${cruiseId}/edit`}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="px-4 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors text-sm text-gray-300"
             >
               Edit Cruise
             </Link>
@@ -195,53 +198,85 @@ export function CruiseObservations() {
         </div>
       </div>
 
-      {/* Observations List */}
-      {observations.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No observations yet</h3>
-          <p className="text-gray-500 mb-6">Start recording sea ice observations for this cruise</p>
+      {/* Tabs */}
+      <div className="mb-6 border-b border-gray-700">
+        <div className="flex space-x-4">
           <button
-            onClick={handleAdd}
-            className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
+            onClick={() => setActiveTab('observations')}
+            className={`px-4 py-2 font-medium transition-colors border-b-2 ${
+              activeTab === 'observations'
+                ? 'border-blue-500 text-blue-400'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
           >
-            <Plus className="h-5 w-5" />
-            <span>Add First Observation</span>
+            Observations ({observations.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('roster')}
+            className={`flex items-center space-x-2 px-4 py-2 font-medium transition-colors border-b-2 ${
+              activeTab === 'roster'
+                ? 'border-blue-500 text-blue-400'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            <span>Observer Roster</span>
           </button>
         </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      </div>
+
+      {/* Observations Tab */}
+      {activeTab === 'observations' && (
+        <>
+          {observations.length === 0 ? (
+            <div className="bg-gray-800 rounded-lg shadow-md p-12 text-center">
+              <MapPin className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-200 mb-2">No observations yet</h3>
+              <p className="text-gray-400 mb-6">Start recording sea ice observations for this cruise</p>
+              <button
+                onClick={handleAdd}
+                className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Add First Observation</span>
+              </button>
+            </div>
+          ) : (
+        <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gray-900 border-b border-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Date/Time
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Position
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Ice Conc.
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Ice Categories
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Weather
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Observer
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-gray-800 divide-y divide-gray-700">
                 {observations.map((obs) => (
-                  <tr key={obs.uuid} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <tr key={obs.uuid} className="hover:bg-gray-750">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {format(new Date(obs.entry_datetime), 'MMM d, yyyy HH:mm')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                       <div className="flex items-center space-x-1">
                         <MapPin className="h-4 w-4" />
                         <span>
@@ -249,12 +284,41 @@ export function CruiseObservations() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {obs.total_ice_concentration !== undefined
                         ? `${obs.total_ice_concentration}%`
                         : '-'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-400">
+                      <div className="space-y-1 text-xs">
+                        {obs.primary_ice && (
+                          <div className="flex items-center space-x-1">
+                            <span className="font-medium text-blue-400">P:</span>
+                            <span>{obs.primary_ice.ice_concentration}/10</span>
+                            <span className="text-gray-500">•</span>
+                            <span>{obs.primary_ice.ice_type || '-'}</span>
+                          </div>
+                        )}
+                        {obs.secondary_ice && (
+                          <div className="flex items-center space-x-1">
+                            <span className="font-medium text-green-400">S:</span>
+                            <span>{obs.secondary_ice.ice_concentration}/10</span>
+                            <span className="text-gray-500">•</span>
+                            <span>{obs.secondary_ice.ice_type || '-'}</span>
+                          </div>
+                        )}
+                        {obs.tertiary_ice && (
+                          <div className="flex items-center space-x-1">
+                            <span className="font-medium text-purple-400">T:</span>
+                            <span>{obs.tertiary_ice.ice_concentration}/10</span>
+                            <span className="text-gray-500">•</span>
+                            <span>{obs.tertiary_ice.ice_type || '-'}</span>
+                          </div>
+                        )}
+                        {!obs.primary_ice && !obs.secondary_ice && !obs.tertiary_ice && '-'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                       <div className="space-y-1">
                         {obs.air_temp !== undefined && (
                           <div className="flex items-center space-x-1">
@@ -270,20 +334,20 @@ export function CruiseObservations() {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                       {obs.observer || '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         <button
                           onClick={() => handleEdit(obs)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-400 hover:text-blue-300"
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(obs.uuid)}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-400 hover:text-red-300"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -296,8 +360,8 @@ export function CruiseObservations() {
           </div>
 
           {/* Summary Stats */}
-          <div className="bg-gray-50 px-6 py-4 border-t">
-            <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="bg-gray-900 px-6 py-4 border-t border-gray-700">
+            <div className="flex items-center justify-between text-sm text-gray-400">
               <span>
                 <strong>{observations.length}</strong> observations recorded
               </span>
@@ -306,6 +370,62 @@ export function CruiseObservations() {
               </span>
             </div>
           </div>
+        </div>
+          )}
+        </>
+      )}
+
+      {/* Roster Tab */}
+      {activeTab === 'roster' && (
+        <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
+          {!cruise.rostered_persons || cruise.rostered_persons.length === 0 ? (
+            <div className="p-12 text-center">
+              <Users className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-400 mb-4">No observer roster configured</p>
+              <Link
+                to={`/cruise/${cruiseId}/edit`}
+                className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              >
+                Configure Roster
+              </Link>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead className="bg-gray-900">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Hour (UTC)
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Observer
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Contact
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                {Array.from({ length: 24 }, (_, hour) => {
+                  const person = cruise.rostered_persons?.find(p =>
+                    p.rostered_hours.includes(hour.toString())
+                  );
+                  return (
+                    <tr key={hour} className="hover:bg-gray-700/50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-300">
+                        {hour.toString().padStart(2, '0')}:00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                        {person?.name || <span className="text-gray-500 italic">Not assigned</span>}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                        {person?.contact || '—'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
 

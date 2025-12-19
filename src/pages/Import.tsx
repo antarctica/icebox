@@ -94,18 +94,18 @@ export function Import() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">Import Observations</h2>
-        <p className="text-gray-600">
+        <h2 className="text-3xl font-bold text-white mb-2">Import Observations</h2>
+        <p className="text-gray-400">
           Upload a CSV file to import observations into a cruise. Download the template to see the required format.
         </p>
       </div>
 
       {/* Download Template */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start space-x-3">
-        <FileText className="h-5 w-5 text-blue-600 mt-0.5" />
+      <div className="bg-blue-900 border border-blue-700 rounded-lg p-4 mb-6 flex items-start space-x-3">
+        <FileText className="h-5 w-5 text-blue-300 mt-0.5" />
         <div className="flex-1">
-          <h3 className="font-semibold text-blue-900 mb-1">Need a template?</h3>
-          <p className="text-sm text-blue-700 mb-3">
+          <h3 className="font-semibold text-blue-100 mb-1">Need a template?</h3>
+          <p className="text-sm text-blue-200 mb-3">
             Download a sample CSV file with the correct format and example data.
           </p>
           <button
@@ -119,25 +119,25 @@ export function Import() {
       </div>
 
       {/* Cruise ID Input */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Cruise ID <span className="text-red-500">*</span>
+      <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Cruise ID <span className="text-red-400">*</span>
         </label>
         <input
           type="text"
           value={cruiseId}
           onChange={(e) => setCruiseId(e.target.value)}
           placeholder="Enter the UUID of the cruise to import into"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
         />
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-400">
           You can find the cruise UUID in the URL when viewing a cruise's observations.
         </p>
       </div>
 
       {/* File Upload Area */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Upload CSV File</h3>
+      <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Upload CSV File</h3>
         
         {!file ? (
           <div
@@ -145,11 +145,11 @@ export function Import() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-              dragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+              dragOver ? 'border-blue-500 bg-blue-900' : 'border-gray-600'
             }`}
           >
-            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">
+            <Upload className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+            <p className="text-gray-400 mb-2">
               Drag and drop your CSV file here, or
             </p>
             <label className="inline-block">
@@ -159,26 +159,26 @@ export function Import() {
                 onChange={handleFileSelect}
                 className="hidden"
               />
-              <span className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium">
+              <span className="text-blue-400 hover:text-blue-300 cursor-pointer font-medium">
                 browse files
               </span>
             </label>
           </div>
         ) : (
-          <div className="border border-gray-200 rounded-lg p-4">
+          <div className="border border-gray-700 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <FileText className="h-8 w-8 text-blue-600" />
+                <FileText className="h-8 w-8 text-blue-400" />
                 <div>
-                  <p className="font-medium text-gray-800">{file.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-gray-200">{file.name}</p>
+                  <p className="text-sm text-gray-400">
                     {(file.size / 1024).toFixed(2)} KB
                   </p>
                 </div>
               </div>
               <button
                 onClick={handleReset}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-300"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -188,7 +188,7 @@ export function Import() {
               <button
                 onClick={handlePreview}
                 disabled={importing}
-                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-200 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
               >
                 Preview Data
               </button>
@@ -206,27 +206,27 @@ export function Import() {
 
       {/* Preview Results */}
       {result && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Import Preview</h3>
+        <div className="bg-gray-800 rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">Import Preview</h3>
 
           {/* Summary */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="flex items-center space-x-2 text-green-700">
+            <div className="bg-green-900 border border-green-700 rounded-lg p-4">
+              <div className="flex items-center space-x-2 text-green-300">
                 <CheckCircle className="h-5 w-5" />
                 <span className="font-medium">Valid Observations</span>
               </div>
-              <p className="text-2xl font-bold text-green-900 mt-2">
+              <p className="text-2xl font-bold text-green-100 mt-2">
                 {result.observations.length}
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-center space-x-2 text-red-700">
+            <div className="bg-red-900 border border-red-700 rounded-lg p-4">
+              <div className="flex items-center space-x-2 text-red-300">
                 <AlertCircle className="h-5 w-5" />
                 <span className="font-medium">Errors</span>
               </div>
-              <p className="text-2xl font-bold text-red-900 mt-2">
+              <p className="text-2xl font-bold text-red-100 mt-2">
                 {result.errors.length}
               </p>
             </div>
@@ -235,17 +235,17 @@ export function Import() {
           {/* Errors */}
           {result.errors.length > 0 && (
             <div className="mb-6">
-              <h4 className="font-semibold text-red-800 mb-2">Errors Found:</h4>
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 max-h-64 overflow-y-auto">
+              <h4 className="font-semibold text-red-300 mb-2">Errors Found:</h4>
+              <div className="bg-red-900 border border-red-700 rounded-lg p-4 max-h-64 overflow-y-auto">
                 <ul className="space-y-1">
                   {result.errors.map((error, index) => (
-                    <li key={index} className="text-sm text-red-700">
+                    <li key={index} className="text-sm text-red-200">
                       • {error}
                     </li>
                   ))}
                 </ul>
               </div>
-              <p className="text-sm text-red-600 mt-2">
+              <p className="text-sm text-red-400 mt-2">
                 Please fix these errors in your CSV file before importing.
               </p>
             </div>
@@ -254,49 +254,49 @@ export function Import() {
           {/* Sample Data Preview */}
           {result.observations.length > 0 && (
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">
+              <h4 className="font-semibold text-white mb-2">
                 Sample Data (first 5 observations):
               </h4>
-              <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <div className="border border-gray-700 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-gray-700">
+                    <thead className="bg-gray-900">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                           Date/Time
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                           Latitude
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                           Longitude
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                           Ice Conc.
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                           Observer
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-gray-800 divide-y divide-gray-700">
                       {result.observations.slice(0, 5).map((obs, index) => (
                         <tr key={index}>
-                          <td className="px-4 py-3 text-sm text-gray-900">
+                          <td className="px-4 py-3 text-sm text-gray-200">
                             {obs.entry_datetime ? new Date(obs.entry_datetime).toLocaleString() : 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900">
+                          <td className="px-4 py-3 text-sm text-gray-200">
                             {obs.latitude?.toFixed(4) ?? 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900">
+                          <td className="px-4 py-3 text-sm text-gray-200">
                             {obs.longitude?.toFixed(4) ?? 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900">
+                          <td className="px-4 py-3 text-sm text-gray-200">
                             {obs.total_ice_concentration !== undefined
                               ? `${obs.total_ice_concentration}%`
                               : 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-900">
+                          <td className="px-4 py-3 text-sm text-gray-200">
                             {obs.observer || 'N/A'}
                           </td>
                         </tr>

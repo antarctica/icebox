@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Ship, BarChart3, Upload } from 'lucide-react';
+import { Ship, BarChart3, Upload, BookOpen } from 'lucide-react';
 
 export function Layout() {
   const location = useLocation();
@@ -8,12 +8,13 @@ export function Layout() {
     { path: '/', label: 'Cruises', icon: Ship },
     { path: '/analysis', label: 'Analysis', icon: BarChart3 },
     { path: '/import', label: 'Import', icon: Upload },
+    { path: '/docs', label: 'Docs', icon: BookOpen },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
       {/* Header */}
-      <header className="bg-blue-600 text-white shadow-lg">
+      <header className="bg-blue-700 text-white shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -50,17 +51,17 @@ export function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 flex-1">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-6 mt-12">
+      <footer className="bg-gray-950 text-gray-400 py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm">
             TwIceBox - British Antarctic Survey
           </p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Modernized version of ASPeCt sea ice observation software
           </p>
         </div>

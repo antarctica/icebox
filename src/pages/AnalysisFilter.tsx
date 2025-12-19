@@ -220,29 +220,29 @@ export function AnalysisFilter() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">Analysis & Filtering</h2>
-        <p className="text-gray-600">
+        <h2 className="text-3xl font-bold text-white mb-2">Analysis & Filtering</h2>
+        <p className="text-gray-400">
           Filter observations by various criteria and view statistical summaries.
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex items-center space-x-2 mb-4">
-          <Filter className="h-5 w-5 text-gray-600" />
-          <h3 className="text-lg font-semibold text-gray-800">Filter Criteria</h3>
+          <Filter className="h-5 w-5 text-gray-400" />
+          <h3 className="text-lg font-semibold text-white">Filter Criteria</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {/* Cruise Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Cruise
             </label>
             <select
               value={filters.cruiseId}
               onChange={(e) => setFilters({ ...filters, cruiseId: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             >
               <option value="">All Cruises</option>
               {cruises.map((cruise) => (
@@ -255,32 +255,32 @@ export function AnalysisFilter() {
 
           {/* Date Filters */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Start Date
             </label>
             <input
               type="date"
               value={filters.startDate}
               onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               End Date
             </label>
             <input
               type="date"
               value={filters.endDate}
               onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           {/* Geographic Filters */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Min Latitude
             </label>
             <input
@@ -289,12 +289,12 @@ export function AnalysisFilter() {
               value={filters.minLat}
               onChange={(e) => setFilters({ ...filters, minLat: e.target.value })}
               placeholder="-90 to 90"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Max Latitude
             </label>
             <input
@@ -303,12 +303,12 @@ export function AnalysisFilter() {
               value={filters.maxLat}
               onChange={(e) => setFilters({ ...filters, maxLat: e.target.value })}
               placeholder="-90 to 90"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Min Longitude
             </label>
             <input
@@ -317,12 +317,12 @@ export function AnalysisFilter() {
               value={filters.minLon}
               onChange={(e) => setFilters({ ...filters, minLon: e.target.value })}
               placeholder="-180 to 180"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Max Longitude
             </label>
             <input
@@ -331,13 +331,13 @@ export function AnalysisFilter() {
               value={filters.maxLon}
               onChange={(e) => setFilters({ ...filters, maxLon: e.target.value })}
               placeholder="-180 to 180"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           {/* Ice Concentration Filters */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Min Ice Concentration (%)
             </label>
             <input
@@ -347,12 +347,12 @@ export function AnalysisFilter() {
               value={filters.minIceConc}
               onChange={(e) => setFilters({ ...filters, minIceConc: e.target.value })}
               placeholder="0-100"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Max Ice Concentration (%)
             </label>
             <input
@@ -362,7 +362,7 @@ export function AnalysisFilter() {
               value={filters.maxIceConc}
               onChange={(e) => setFilters({ ...filters, maxIceConc: e.target.value })}
               placeholder="0-100"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             />
           </div>
         </div>
@@ -378,7 +378,7 @@ export function AnalysisFilter() {
           </button>
           <button
             onClick={handleReset}
-            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors text-gray-300"
           >
             Reset
           </button>
@@ -387,11 +387,11 @@ export function AnalysisFilter() {
 
       {/* Statistics */}
       {statistics && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="h-5 w-5 text-gray-600" />
-              <h3 className="text-lg font-semibold text-gray-800">Statistics</h3>
+              <BarChart3 className="h-5 w-5 text-gray-400" />
+              <h3 className="text-lg font-semibold text-white">Statistics</h3>
             </div>
             {filteredObservations.length > 0 && (
               <button
@@ -405,44 +405,44 @@ export function AnalysisFilter() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-700 mb-1">Total Observations</p>
-              <p className="text-2xl font-bold text-blue-900">
+            <div className="bg-blue-900 border border-blue-700 rounded-lg p-4">
+              <p className="text-sm text-blue-300 mb-1">Total Observations</p>
+              <p className="text-2xl font-bold text-blue-100">
                 {statistics.totalObservations}
               </p>
             </div>
 
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-              <p className="text-sm text-purple-700 mb-1">Avg Ice Conc.</p>
-              <p className="text-2xl font-bold text-purple-900">
+            <div className="bg-purple-900 border border-purple-700 rounded-lg p-4">
+              <p className="text-sm text-purple-300 mb-1">Avg Ice Conc.</p>
+              <p className="text-2xl font-bold text-purple-100">
                 {statistics.avgIceConcentration.toFixed(1)}%
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-700 mb-1">Avg Air Temp</p>
-              <p className="text-2xl font-bold text-red-900">
+            <div className="bg-red-900 border border-red-700 rounded-lg p-4">
+              <p className="text-sm text-red-300 mb-1">Avg Air Temp</p>
+              <p className="text-2xl font-bold text-red-100">
                 {statistics.avgAirTemp.toFixed(1)}°C
               </p>
             </div>
 
-            <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-4">
-              <p className="text-sm text-cyan-700 mb-1">Avg Water Temp</p>
-              <p className="text-2xl font-bold text-cyan-900">
+            <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-4">
+              <p className="text-sm text-cyan-300 mb-1">Avg Water Temp</p>
+              <p className="text-2xl font-bold text-cyan-100">
                 {statistics.avgWaterTemp.toFixed(1)}°C
               </p>
             </div>
 
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-sm text-green-700 mb-1">Avg Wind Speed</p>
-              <p className="text-2xl font-bold text-green-900">
+            <div className="bg-green-900 border border-green-700 rounded-lg p-4">
+              <p className="text-sm text-green-300 mb-1">Avg Wind Speed</p>
+              <p className="text-2xl font-bold text-green-100">
                 {statistics.avgWindSpeed.toFixed(1)} m/s
               </p>
             </div>
           </div>
 
           {statistics.dateRange.start && statistics.dateRange.end && (
-            <div className="mt-4 text-sm text-gray-600">
+            <div className="mt-4 text-sm text-gray-400">
               <span className="font-medium">Date Range:</span>{' '}
               {format(statistics.dateRange.start, 'MMM d, yyyy')} -{' '}
               {format(statistics.dateRange.end, 'MMM d, yyyy')}
@@ -453,56 +453,56 @@ export function AnalysisFilter() {
 
       {/* Results Table */}
       {filteredObservations.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800">
+        <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
+          <div className="p-4 border-b border-gray-700">
+            <h3 className="text-lg font-semibold text-white">
               Filtered Observations ({filteredObservations.length})
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-700">
+              <thead className="bg-gray-900">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Date/Time
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Position
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Ice Conc.
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Air Temp
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Water Temp
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Observer
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-gray-800 divide-y divide-gray-700">
                 {filteredObservations.map((obs) => (
-                  <tr key={obs.uuid} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <tr key={obs.uuid} className="hover:bg-gray-750">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {format(new Date(obs.entry_datetime), 'MMM d, yyyy HH:mm')}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       <div className="flex items-center space-x-1">
-                        <MapPin className="h-3 w-3 text-gray-400" />
+                        <MapPin className="h-3 w-3 text-gray-500" />
                         <span>
                           {obs.latitude.toFixed(4)}, {obs.longitude.toFixed(4)}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {obs.total_ice_concentration !== undefined
                         ? `${obs.total_ice_concentration}%`
                         : 'N/A'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {obs.air_temp !== undefined ? (
                         <div className="flex items-center space-x-1">
                           <Thermometer className="h-3 w-3 text-red-400" />
@@ -512,10 +512,10 @@ export function AnalysisFilter() {
                         'N/A'
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                       {obs.water_temp !== undefined ? `${obs.water_temp.toFixed(1)}°C` : 'N/A'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                       {obs.observer || 'N/A'}
                     </td>
                   </tr>
@@ -528,10 +528,10 @@ export function AnalysisFilter() {
 
       {/* No Results */}
       {!loading && filteredObservations.length === 0 && statistics === null && (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <BarChart3 className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No Results</h3>
-          <p className="text-gray-500">
+        <div className="bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <BarChart3 className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-200 mb-2">No Results</h3>
+          <p className="text-gray-400">
             Apply filters above to analyze your observation data.
           </p>
         </div>
