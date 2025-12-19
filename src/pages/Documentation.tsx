@@ -167,14 +167,14 @@ For each ice category, you can record:
             title: 'Reference Photography',
             content: 'Visual examples of different floe sizes and ice formations:',
             images: [
-              { src: '/docs/_images/pancakes.jpg', caption: '100 - Pancakes: Cemented pancakes with raised rims' },
-              { src: '/docs/_images/new-sheet-ice.jpg', caption: '200 - New Sheet Ice' },
-              { src: '/docs/_images/brash-ice.jpg', caption: '300 - Brash/Broken Ice' },
-              { src: '/docs/_images/cake-ice.jpg', caption: '400 - Cake Ice (<20m)' },
-              { src: '/docs/_images/small-floes.jpg', caption: '500 - Small Floes (20-100m)' },
-              { src: '/docs/_images/medium-floes.jpg', caption: '600 - Medium Floes (100-500m)' },
-              { src: '/docs/_images/large-floes.jpg', caption: '700 - Large Floes (500-2000m)' },
-              { src: '/docs/_images/vast-floes.jpg', caption: '800 - Vast Floes (>2000m)' }
+              { src: '/images/pancakes.jpg', caption: '100 - Pancakes: Cemented pancakes with raised rims' },
+              { src: '/images/new-sheet-ice.jpg', caption: '200 - New Sheet Ice' },
+              { src: '/images/brash-ice.jpg', caption: '300 - Brash/Broken Ice' },
+              { src: '/images/cake-ice.jpg', caption: '400 - Cake Ice (<20m)' },
+              { src: '/images/small-floes.jpg', caption: '500 - Small Floes (20-100m)' },
+              { src: '/images/medium-floes.jpg', caption: '600 - Medium Floes (100-500m)' },
+              { src: '/images/large-floes.jpg', caption: '700 - Large Floes (500-2000m)' },
+              { src: '/images/vast-floes.jpg', caption: '800 - Vast Floes (>2000m)' }
             ]
           }
         ]
@@ -202,11 +202,11 @@ Example: R3 means ridged ice covering 20-30% of the surface`,
             title: 'Reference Photography',
             content: 'Visual examples of ice topography:',
             images: [
-              { src: '/docs/_images/level-ice.jpg', caption: 'Level Ice - Smooth surface' },
-              { src: '/docs/_images/finger-rafting.jpg', caption: 'Finger Rafting' },
-              { src: '/docs/_images/consolidated-ridge.jpg', caption: 'Consolidated Ridge' },
-              { src: '/docs/_images/new-unconsolidated-ridges.jpg', caption: 'New Unconsolidated Ridges' },
-              { src: '/docs/_images/old-weathered-ridge.jpg', caption: 'Old Weathered Ridge' }
+              { src: '/images/level-ice.jpg', caption: 'Level Ice - Smooth surface' },
+              { src: '/images/finger-rafting.jpg', caption: 'Finger Rafting' },
+              { src: '/images/consolidated-ridge.jpg', caption: 'Consolidated Ridge' },
+              { src: '/images/new-unconsolidated-ridges.jpg', caption: 'New Unconsolidated Ridges' },
+              { src: '/images/old-weathered-ridge.jpg', caption: 'Old Weathered Ridge' }
             ]
           }
         ]
@@ -225,9 +225,9 @@ Brown ice is measured by the visual coloration intensity of each layer.`,
             title: 'Reference Photography',
             content: 'Examples of algal communities:',
             images: [
-              { src: '/docs/_images/surface.jpg', caption: 'Surface Algal Community' },
-              { src: '/docs/_images/internal.jpg', caption: 'Internal/Middle Algal Community' },
-              { src: '/docs/_images/bottom.jpg', caption: 'Bottom Algal Community' }
+              { src: '/images/surface.jpg', caption: 'Surface Algal Community' },
+              { src: '/images/internal.jpg', caption: 'Internal/Middle Algal Community' },
+              { src: '/images/bottom.jpg', caption: 'Bottom Algal Community' }
             ]
           }
         ]
@@ -393,17 +393,30 @@ export function Documentation() {
                       const ListTag = isOrdered ? 'ol' : 'ul';
                       
                       return (
-                        <ListTag key={idx} className="text-gray-300 space-y-2 mb-4">
-                          {items.map((item, i) => (
-                            <li key={i} className="leading-relaxed">
-                              {item.replace(/^[-•]\s/, '').replace(/^\d+\.\s/, '')}
-                            </li>
-                          ))}
+                        <ListTag key={idx} className={`text-gray-300 space-y-2 mb-4 ${isOrdered ? 'list-decimal' : 'list-disc'} ml-5`}>
+                          {items.map((item, i) => {
+                            const cleanItem = item.replace(/^[-•]\s/, '').replace(/^\d+\.\s/, '');
+                            // Parse bold within list items
+                            const parts = cleanItem.split(/\*\*(.*?)\*\*/g);
+                            return (
+                              <li key={i} className="leading-relaxed">
+                                {parts.map((part, j) =>
+                                  j % 2 === 1 ? (
+                                    <strong key={j} className="text-white font-semibold">
+                                      {part}
+                                    </strong>
+                                  ) : (
+                                    part
+                                  )
+                                )}
+                              </li>
+                            );
+                          })}
                         </ListTag>
                       );
                     }
 
-                    // Handle bold text
+                    // Handle bold text in paragraphs
                     const parts = paragraph.split(/\*\*(.*?)\*\*/g);
                     return (
                       <p key={idx} className="text-gray-300 leading-relaxed mb-4">
