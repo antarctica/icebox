@@ -1,13 +1,15 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // Sync status enum matching the original application
-export enum SyncStatus {
-  LOCAL = 0,
-  DISPATCHED = 1,
-  SYNCED = 2,
-  FLAG_FOR_DELETION = 3,
-  STALE = 4,
-}
+export const SyncStatus = {
+  LOCAL: 0,
+  DISPATCHED: 1,
+  SYNCED: 2,
+  FLAG_FOR_DELETION: 3,
+  STALE: 4,
+} as const;
+
+export type SyncStatus = typeof SyncStatus[keyof typeof SyncStatus];
 
 // Rostered person for observer assignments
 export interface RosteredPerson {
