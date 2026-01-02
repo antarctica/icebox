@@ -4,6 +4,8 @@ _So good they built it twice!_
 
 TwIceBox is a complete modernization of IceBox, the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analyzing sea ice data during research cruises.
 
+** This repository must remain private until approval has been granted from AAD, or until such time this repository has removed some of the copyrighted material that is currently used. **
+
 ## Overview
 
 This application enables researchers to:
