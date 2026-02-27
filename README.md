@@ -24,16 +24,16 @@ Originally developed by the Australian Antarctic Division (AAD), this is a refac
 
 ## Screenshots
 
-### Cruise List
+### Cruise Overview
 ![Cruise List](public/cruises.png)
 
-### Observations
+### Observations Overview
 ![Observations](public/observations.png)
 
 ### Analysis & Filtering
 ![Analysis & Filtering](public/analysis.png)
 
-### Import
+### Importing observation data
 ![Import](public/import.png)
 
 ## Quick Start
@@ -159,7 +159,6 @@ For IceBox v2.0.0 onwards:
 
 This is a refactor of the original IceBox v1.8.4. For all version up to v1.8.4:
 
-* **Original Application**: ASPeCt IceBox  
 * **Original Author**: Australian Antarctic Division  
 * **Original Developer**: James Rakich (Maluco Marinero)  
 * **Original Repository**: https://bitbucket.org/MalucoMarinero/aspect
