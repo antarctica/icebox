@@ -83,12 +83,12 @@ export interface CruiseObservation {
 }
 
 // Database class
-class TwIceBoxDatabase extends Dexie {
+class IceBoxDatabase extends Dexie {
   cruises!: EntityTable<Cruise, 'uuid'>;
   observations!: EntityTable<CruiseObservation, 'uuid'>;
 
   constructor() {
-    super('TwIceBoxDB');
+    super('IceBoxDB');
     
     this.version(1).stores({
       cruises: 'uuid, syncStatus, name, start_date, end_date, creator',
@@ -97,7 +97,7 @@ class TwIceBoxDatabase extends Dexie {
   }
 }
 
-export const db = new TwIceBoxDatabase();
+export const db = new IceBoxDatabase();
 
 // Helper functions for creating blank entities
 export function makeBlankCruise(): Partial<Cruise> {

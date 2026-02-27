@@ -20,7 +20,7 @@ export function Layout() {
             <div className="flex items-center space-x-3">
               <Ship className="h-8 w-8" />
               <div>
-                <h1 className="text-2xl font-bold">TwIceBox</h1>
+                <h1 className="text-2xl font-bold">IceBox</h1>
                 <p className="text-sm text-blue-100">Sea Ice Observation Software</p>
               </div>
             </div>
@@ -59,7 +59,7 @@ export function Layout() {
       <footer className="bg-gray-950 text-gray-400 py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm">
-            TwIceBox - British Antarctic Survey
+            IceBox - British Antarctic Survey
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Modernized version of ASPeCt sea ice observation software

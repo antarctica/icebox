@@ -10,7 +10,7 @@ interface DocSection {
 const documentation: DocSection[] = [
   {
     title: 'Introduction',
-    content: `TwIceBox is a complete modernization of IceBox, the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analyzing sea ice data during research cruises.
+    content: `IceBox 2.0.0 is a modernization and refactor of the original IceBox v1.8.4, the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analyzing sea ice data during research cruises.
 
 This application enables researchers to:
 - Record sea ice observations with coordinates
@@ -21,7 +21,7 @@ This application enables researchers to:
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-The original IceBox was developed by the Australian Antarctic Division. TwIceBox is a refactoring by the British Antarctic Survey using modern web technologies while preserving all original functionality.`
+The IceBox versions up to 1.8.4 were developed by the Australian Antarctic Division. This is a refactoring by the British Antarctic Survey using modern web technologies while preserving all original functionality.`
   },
   {
     title: 'Getting Started',
@@ -260,7 +260,7 @@ CSV Format Requirements:
   },
   {
     title: 'Data Storage',
-    content: `TwIceBox stores all data locally in your browser using IndexedDB:
+    content: `IceBox stores all data locally in your browser using IndexedDB:
 
 **Advantages:**
 - Works completely offline
@@ -282,7 +282,7 @@ CSV Format Requirements:
   },
   {
     title: 'Acknowledgements',
-    content: `**TwIceBox** is developed and maintained by the British Antarctic Survey.
+    content: `**IceBox** is developed and maintained by the British Antarctic Survey.
 
 The original **IceBox** application was developed by the Australian Antarctic Division.
 
@@ -410,7 +410,7 @@ export function Documentation() {
           <h1 className="text-3xl font-bold text-white">Documentation</h1>
         </div>
         <p className="text-gray-400">
-          Complete guide to using TwIceBox for sea ice observations
+          Complete guide to using IceBox for sea ice observations
         </p>
       </div>
 
@@ -419,7 +419,7 @@ export function Documentation() {
       </div>
 
       <div className="mt-8 text-center text-sm text-gray-500">
-        <p>TwIceBox • ASPeCt Sea Ice Observations</p>
+        <p>IceBox • ASPeCt Sea Ice Observations</p>
         <p className="mt-1">© 2025 Australian Antarctic Division</p>
       </div>
     </div>
