@@ -4,7 +4,6 @@ import { BookOpen, ChevronRight, ChevronDown } from 'lucide-react';
 interface DocSection {
   title: string;
   content?: string;
-  images?: { src: string; caption: string }[];
   subsections?: DocSection[];
 }
 
@@ -22,7 +21,7 @@ This application enables researchers to:
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-The original IceBox was developed by the Australian Antarctic Division. TwIceBox is a ground-up rewrite by the British Antarctic Survey using modern web technologies while preserving all original functionality.`
+The original IceBox was developed by the Australian Antarctic Division. TwIceBox is a refactoring by the British Antarctic Survey using modern web technologies while preserving all original functionality.`
   },
   {
     title: 'Getting Started',
@@ -161,23 +160,7 @@ For each ice category, you can record:
 - **S** - Small (20-100 m)
 - **C** - Cake (2-20 m)
 - **BC** - Brash & Cake (<2 m)
-- **P** - Pancake ice`,
-        subsections: [
-          {
-            title: 'Reference Photography',
-            content: 'Visual examples of different floe sizes and ice formations:',
-            images: [
-              { src: '/images/pancakes.jpg', caption: '100 - Pancakes: Cemented pancakes with raised rims' },
-              { src: '/images/new-sheet-ice.jpg', caption: '200 - New Sheet Ice' },
-              { src: '/images/brash-ice.jpg', caption: '300 - Brash/Broken Ice' },
-              { src: '/images/cake-ice.jpg', caption: '400 - Cake Ice (<20m)' },
-              { src: '/images/small-floes.jpg', caption: '500 - Small Floes (20-100m)' },
-              { src: '/images/medium-floes.jpg', caption: '600 - Medium Floes (100-500m)' },
-              { src: '/images/large-floes.jpg', caption: '700 - Large Floes (500-2000m)' },
-              { src: '/images/vast-floes.jpg', caption: '800 - Vast Floes (>2000m)' }
-            ]
-          }
-        ]
+- **P** - Pancake ice`
       },
       {
         title: 'Topography',
@@ -196,20 +179,7 @@ For each ice category, you can record:
 - 4 - 30-40% ridged
 - 5 - >40% ridged
 
-Example: R3 means ridged ice covering 20-30% of the surface`,
-        subsections: [
-          {
-            title: 'Reference Photography',
-            content: 'Visual examples of ice topography:',
-            images: [
-              { src: '/images/level-ice.jpg', caption: 'Level Ice - Smooth surface' },
-              { src: '/images/finger-rafting.jpg', caption: 'Finger Rafting' },
-              { src: '/images/consolidated-ridge.jpg', caption: 'Consolidated Ridge' },
-              { src: '/images/new-unconsolidated-ridges.jpg', caption: 'New Unconsolidated Ridges' },
-              { src: '/images/old-weathered-ridge.jpg', caption: 'Old Weathered Ridge' }
-            ]
-          }
-        ]
+Example: R3 means ridged ice covering 20-30% of the surface`
       },
       {
         title: 'Brown Ice',
@@ -219,18 +189,7 @@ Example: R3 means ridged ice covering 20-30% of the surface`,
 - **Internal/Middle** - Algae within the ice structure
 - **Bottom** - Algae on the underside of the ice
 
-Brown ice is measured by the visual colouration intensity of each layer.`,
-        subsections: [
-          {
-            title: 'Reference Photography',
-            content: 'Examples of algal communities:',
-            images: [
-              { src: '/images/surface.jpg', caption: 'Surface Algal Community' },
-              { src: '/images/internal.jpg', caption: 'Internal/Middle Algal Community' },
-              { src: '/images/bottom.jpg', caption: 'Bottom Algal Community' }
-            ]
-          }
-        ]
+Brown ice is measured by the visual colouration intensity of each layer.`
       }
     ]
   },
@@ -323,11 +282,7 @@ CSV Format Requirements:
   },
   {
     title: 'Acknowledgements',
-    content: `Reference photography and scientific guidance provided by:
-
-Allison, I • Ackley, S • Calder, D • Canterbury, G • Delille, D • Fahrbach, E • Gormly, P • Haas, C • Haddock, P • Heil, P • Kosloff, P • Lytle, V • Massom, R • Monselesan, D • Reeves, R • Ushio, S • Worby, A
-
-**TwIceBox** is developed and maintained by the British Antarctic Survey.
+    content: `**TwIceBox** is developed and maintained by the British Antarctic Survey.
 
 The original **IceBox** application was developed by the Australian Antarctic Division.
 
@@ -434,23 +389,6 @@ export function Documentation() {
                       </p>
                     );
                   })}
-                </div>
-              </div>
-            )}
-
-            {section.images && (
-              <div className={`px-4 ${level > 0 ? 'ml-4' : ''} mb-4`}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {section.images.map((img, idx) => (
-                    <div key={idx} className="bg-gray-900/50 rounded-lg overflow-hidden border border-gray-700">
-                      <img 
-                        src={img.src} 
-                        alt={img.caption}
-                        className="w-full h-48 object-cover"
-                      />
-                      <p className="text-sm text-gray-400 p-3">{img.caption}</p>
-                    </div>
-                  ))}
                 </div>
               </div>
             )}
