@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "IceBox"
+abstract: "A web application for collecting and analysing Antarctic sea ice observation data during research cruises, implementing the ASPeCt (Antarctic Sea Ice Processes and Climate) observation protocol."
+version: 2.0.0
+date-released: 2026-02-27
+license: MIT
+url: "https://github.com/antarctica/icebox"
+repository-code: "https://github.com/antarctica/icebox"
+
+authors:
+  - name: "British Antarctic Survey"
+    city: Cambridge
+    country: GB
+    website: "https://www.bas.ac.uk"
+
+contributors:
+  - family-names: Zwagerman
+    given-names: Thomas
+    affiliation: "British Antarctic Survey"
+
+references:
+  - type: software
+    title: "IceBox v1.8.4"
+    authors:
+      - name: "Australian Antarctic Division"
+      - family-names: Rakich
+        given-names: James
+        alias: "Maluco Marinero"
+    url: "https://bitbucket.org/MalucoMarinero/aspect"
+    notes: "Original implementation that this software refactors"
+
+keywords:
+  - "sea ice"
+  - "Antarctic"
+  - "ASPeCt"
+  - "research cruise"
+  - "oceanography"
+  - "climate science"
+  - "data collection"
