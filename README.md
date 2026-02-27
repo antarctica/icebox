@@ -18,7 +18,7 @@ This application enables researchers to:
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-Originally developed by the Australian Antarctic Division (AAD), this is a refactoring by the British Antarctic Survey using modern web technologies while preserving all original functionality.
+Originally developed by the Australian Antarctic Division (AAD), this is a refactoring by the British Antarctic Survey (BAS) using modern web technologies while preserving all original functionality.
 
 ## Quick Start
 
