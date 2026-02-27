@@ -26,53 +26,6 @@ npm run dev
 
 Visit **http://localhost:5173/** to use the application.
 
-## Features
-
-### Cruise Management
-- Create and edit research cruises with vessel details
-- Track voyage dates, leaders, and crew
-- View observation counts per cruise
-- Delete cruises (with cascade to observations)
-
-### Observation Recording
-Data entry for each observation:
-- **Location**: GPS coordinates (latitude/longitude)
-- **Ice Data**: Total ice concentration (tenths, 0-10), open water type, and up to three ice categories (primary, secondary, tertiary) each with:
-  - Ice concentration (tenths), ice type code, thickness code/range, floe size
-  - Topography type and coverage, snow type and thickness
-  - Brown ice indicator, melt pond coverage, depth, and dimensions
-- **Weather**: Air temperature, water temperature, wind speed/direction
-- **Conditions**: Cloud cover (0-8 oktas), visibility levels
-- **Metadata**: Observer name, comments, timestamp
-
-### Import and Export Capabilities
-Export individual cruises or filtered analysis results:
-- **CSV**
-- **ASPECT Format**: Text format based on ASPECT standard
-- Import data into any cruise 
-
-### Data Analysis
-Filter observations by:
-- Cruise selection
-- Date range
-- Geographic bounds (lat/long bounding box)
-- Ice concentration range
-
-View statistics:
-- Total observations matching filters
-- Average ice concentration
-- Average air/water temperature
-- Average wind speed
-- Date range coverage
-
-## Data Storage
-
-All data is stored locally in **IndexedDB** via Dexie.js:
-- Works offline, no server required
-- Data persists across browser sessions
-- Full CRUD operations with TypeScript type safety
-- Database schema includes **Cruises** and **Observations**
-
 ## Development
 
 ### Available Scripts
@@ -114,6 +67,15 @@ Output is in the `dist/` directory, ready for static hosting or Electron packagi
 - Custom configuration in `tailwind.config.js`
 - PostCSS processing with `@tailwindcss/postcss` plugin
 - Modern `@import "tailwindcss"` syntax (v4)
+
+### IndexedDB
+
+All data is stored locally in **IndexedDB** via Dexie.js:
+- Works offline, no server required
+- Data persists across browser sessions
+- Full CRUD operations with TypeScript type safety
+- Database schema includes **Cruises** and **Observations**
+
 
 ## Credits
 
