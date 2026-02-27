@@ -22,6 +22,20 @@ This application enables researchers to:
 
 Originally developed by the Australian Antarctic Division (AAD), this is a refactoring by the British Antarctic Survey (BAS) using modern web technologies while preserving all original functionality.
 
+## Screenshots
+
+### Cruise List
+![Cruise List](public/cruises.png)
+
+### Observations
+![Observations](public/observations.png)
+
+### Analysis & Filtering
+![Analysis & Filtering](public/analysis.png)
+
+### Import
+![Import](public/import.png)
+
 ## Quick Start
 
 ```bash
