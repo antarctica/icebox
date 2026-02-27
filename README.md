@@ -1,10 +1,8 @@
-# TwIceBox
+# IceBox
 
 _So good they built it twice!_
 
-TwIceBox is a complete modernization of [IceBox](https://aws.data.aad.gov.au/aspect/), the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analyzing sea ice data during research cruises.
-
-** This repository must remain private until approval has been granted from AAD to use the reference imagery and documentation, or until such time that these are replaced with our own reference library and docs. **
+IceBox 2.0.0 is a complete modernization of [IceBox v1.8.3](https://aws.data.aad.gov.au/aspect/), the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analysing sea ice data during research cruises.
 
 ## Overview
 
@@ -12,11 +10,11 @@ This application enables researchers to:
 - Record sea ice observations with coordinates
 - Track meteorological data (temperature, wind, cloud cover)
 - Document ice conditions and concentrations
-- Analyze and filter observation data
+- Analyse and filter observation data
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-Originally developed by the Australian Antarctic Division, this is a ground-up rewrite using modern web technologies while preserving all original functionality.
+Originally developed by the Australian Antarctic Division (AAD), this is a refactoring using modern web technologies while preserving all original functionality.
 
 ## Quick Start
 
@@ -39,25 +37,21 @@ Visit **http://localhost:5173/** to use the application.
 - Delete cruises (with cascade to observations)
 
 ### Observation Recording
-Comprehensive data entry for each observation:
-- **Location**: GPS coordinates (latitude/longitude with validation)
-- **Ice Data**: Total ice concentration (0-100%), open water type
+Data entry for each observation:
+- **Location**: GPS coordinates (latitude/longitude)
+- **Ice Data**: Total ice concentration (tenths, 0-10), open water type, and up to three ice categories (primary, secondary, tertiary) each with:
+  - Ice concentration (tenths), ice type code, thickness code/range, floe size
+  - Topography type and coverage, snow type and thickness
+  - Brown ice indicator, melt pond coverage, depth, and dimensions
 - **Weather**: Air temperature, water temperature, wind speed/direction
 - **Conditions**: Cloud cover (0-8 oktas), visibility levels
 - **Metadata**: Observer name, comments, timestamp
 
-### Export Capabilities
-- **CSV Format**: Spreadsheet-compatible export with all fields
-- **ASPECT Format**: Scientific standard text format
-- Export individual cruises or filtered analysis results
-- Automatic filename generation with timestamps
-
-### Import Functionality
-- Drag-and-drop CSV upload
-- Validation with detailed error reporting
-- Preview data before import with summary statistics
-- Download sample template with example data
-- Bulk import into any cruise
+### Import and Export Capabilities
+Export individual cruises or filtered analysis results:
+- **CSV**
+- **ASPECT Format**: Text format based on ASPECT standard
+- Import data into any cruise 
 
 ### Data Analysis
 Filter observations by:
@@ -73,19 +67,13 @@ View statistics:
 - Average wind speed
 - Date range coverage
 
-Export filtered results to CSV for further analysis.
-
 ## Data Storage
 
 All data is stored locally in **IndexedDB** via Dexie.js:
-- No server required - works completely offline
+- Works offline, no server required
 - Data persists across browser sessions
-- Fast reactive queries for real-time updates
 - Full CRUD operations with TypeScript type safety
-
-Database schema includes:
-- **Cruises**: Voyage metadata, dates, personnel
-- **Observations**: GPS, ice data, weather conditions, metadata
+- Database schema includes **Cruises** and **Observations**
 
 ## Development
 
@@ -131,12 +119,12 @@ Output is in the `dist/` directory, ready for static hosting or Electron packagi
 
 ## Credits
 
-For TwIceBox:
+For IceBox 2.0.0:
 
 **Author**: British Antarctic Survey
 **Developer**: Thomas Zwagerman
 
-This is a complete rewrite of the original application. For the legacy Electron ASPeCt IceBox version:
+This is a refactor of the original IceBox v1.8.4. For the legacy electron-based version:
 
 **Original Application**: ASPeCt IceBox  
 **Original Author**: Australian Antarctic Division  
