@@ -1,8 +1,6 @@
 # IceBox
 
-_So good they built it twice!_
-
-IceBox 2.0.0 is a complete modernization of [IceBox v1.8.3](https://aws.data.aad.gov.au/aspect/), the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analysing sea ice data during research cruises.
+IceBox 2.0.0 is a modernisation and refactor of [IceBox v1.8.3](https://aws.data.aad.gov.au/aspect/), the Antarctic Sea Ice Processes and Climate (ASPeCt) observation software for collecting and analysing sea ice data during research cruises.
 
 ## Overview
 
@@ -14,7 +12,7 @@ This application enables researchers to:
 - Export data in CSV and ASPECT formats
 - Import bulk observations from CSV files
 
-Originally developed by the Australian Antarctic Division (AAD), this is a refactoring using modern web technologies while preserving all original functionality.
+Originally developed by the Australian Antarctic Division (AAD), this is a refactoring by the British Antarctic Survey using modern web technologies while preserving all original functionality.
 
 ## Quick Start
 
