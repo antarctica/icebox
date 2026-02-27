@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, Download, FileText, AlertCircle, CheckCircle, X } from 'lucide-react';
-import { parseObservationsCsv, generateSampleCsv, type ImportResult } from '../services/import';
-import { observationAPI } from '../db/api';
+import { Upload, Download, FileText, AlertCircle, CheckCircle, X, PlusCircle } from 'lucide-react';
+import { parseObservationsCsv, parseAspectTextFile, detectFileFormat, generateSampleCsv, type ImportResult } from '../services/import';
+import { observationAPI, cruiseAPI } from '../db/api';
 import { downloadFile } from '../services/export';
-import type { CruiseObservation } from '../db/database';
+import type { Cruise, CruiseObservation } from '../db/database';
+import { SyncStatus } from '../db/database';
 
 export function Import() {
   const navigate = useNavigate();
@@ -13,6 +14,50 @@ export function Import() {
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [cruises, setCruises] = useState<Cruise[]>([]);
+  const [creatingCruise, setCreatingCruise] = useState(false);
+
+  useEffect(() => {
+    cruiseAPI.getAll().then(setCruises);
+  }, []);
+
+  // When an ASPeCt file parse result comes in, try to auto-select a matching cruise by name
+  function tryAutoSelectCruise(parseResult: ImportResult) {
+    if (!parseResult.cruiseMeta?.name) return;
+    const match = cruises.find(
+      (c) => c.name.trim().toLowerCase() === parseResult.cruiseMeta!.name!.trim().toLowerCase()
+    );
+    if (match) setCruiseId(match.uuid);
+  }
+
+  async function handleCreateCruiseFromFile() {
+    if (!result?.cruiseMeta) return;
+    const meta = result.cruiseMeta;
+    if (!meta.name || !meta.voyage_leader || !meta.captain_name) {
+      alert('File metadata is missing required cruise fields (name, voyage_leader, captain_name).');
+      return;
+    }
+    setCreatingCruise(true);
+    try {
+      const newCruise = await cruiseAPI.create({
+        name: meta.name,
+        voyage_leader: meta.voyage_leader,
+        captain_name: meta.captain_name,
+        voyage_vessel: meta.voyage_vessel,
+        start_date: meta.start_date ? new Date(meta.start_date) : new Date(),
+        end_date: meta.end_date ? new Date(meta.end_date) : new Date(),
+        syncStatus: SyncStatus.LOCAL,
+        published: false,
+        localChanges: 0,
+      });
+      setCruises((prev) => [...prev, newCruise]);
+      setCruiseId(newCruise.uuid);
+    } catch (error) {
+      alert(`Failed to create cruise: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setCreatingCruise(false);
+    }
+  }
 
   function handleDragOver(e: React.DragEvent) {
     e.preventDefault();
@@ -29,11 +74,19 @@ export function Import() {
     setDragOver(false);
 
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.type === 'text/csv') {
+    if (!droppedFile) return;
+    const isText =
+      droppedFile.type === 'text/csv' ||
+      droppedFile.type === 'text/plain' ||
+      droppedFile.type === '' ||
+      droppedFile.name.endsWith('.csv') ||
+      droppedFile.name.endsWith('.txt') ||
+      /^\d{8}[A-Za-z]{2}\d+$/.test(droppedFile.name);
+    if (isText) {
       setFile(droppedFile);
       setResult(null);
     } else {
-      alert('Please drop a CSV file');
+      alert('Please drop a CSV file or an ASPeCt text file (e.g. 20260101SD056)');
     }
   }
 
@@ -50,8 +103,13 @@ export function Import() {
 
     try {
       const content = await file.text();
-      const parseResult = parseObservationsCsv(content);
+      const format = detectFileFormat(file.name, content);
+      const parseResult =
+        format === 'aspect'
+          ? parseAspectTextFile(content)
+          : parseObservationsCsv(content);
       setResult(parseResult);
+      tryAutoSelectCruise(parseResult);
     } catch (error) {
       alert(`Failed to parse file: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -96,7 +154,7 @@ export function Import() {
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Import Observations</h2>
         <p className="text-gray-400">
-          Upload a CSV file to import observations into a cruise. Download the template to see the required format.
+          Upload a CSV file or an ASPeCt text file (e.g. <code className="text-blue-300">20260101SD056</code>) to import observations into a cruise.
         </p>
       </div>
 
@@ -118,26 +176,44 @@ export function Import() {
         </div>
       </div>
 
-      {/* Cruise ID Input */}
+      {/* Cruise Selector */}
       <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Cruise ID <span className="text-red-400">*</span>
+          Cruise <span className="text-red-400">*</span>
         </label>
-        <input
-          type="text"
-          value={cruiseId}
-          onChange={(e) => setCruiseId(e.target.value)}
-          placeholder="Enter the UUID of the cruise to import into"
-          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-        />
-        <p className="mt-2 text-sm text-gray-400">
-          You can find the cruise UUID in the URL when viewing a cruise's observations.
-        </p>
+        {cruises.length === 0 ? (
+          <p className="text-sm text-yellow-400">No cruises found. Create a cruise first, or import an ASPeCt file and use &ldquo;Create cruise from file&rdquo; below.</p>
+        ) : (
+          <select
+            value={cruiseId}
+            onChange={(e) => setCruiseId(e.target.value)}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+          >
+            <option value="">— Select a cruise —</option>
+            {cruises.map((c) => (
+              <option key={c.uuid} value={c.uuid}>
+                {c.name}{c.voyage_vessel ? ` · ${c.voyage_vessel}` : ''} ({new Date(c.start_date).toLocaleDateString()} – {new Date(c.end_date).toLocaleDateString()})
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Create cruise from ASPeCt file metadata */}
+        {result?.cruiseMeta && !cruiseId && (
+          <button
+            onClick={handleCreateCruiseFromFile}
+            disabled={creatingCruise}
+            className="mt-3 flex items-center space-x-2 text-sm bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+          >
+            <PlusCircle className="h-4 w-4" />
+            <span>{creatingCruise ? 'Creating...' : `Create cruise "${result.cruiseMeta.name}" from file`}</span>
+          </button>
+        )}
       </div>
 
       {/* File Upload Area */}
       <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Upload CSV File</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Upload CSV or ASPeCt File</h3>
         
         {!file ? (
           <div
@@ -150,12 +226,12 @@ export function Import() {
           >
             <Upload className="h-12 w-12 text-gray-500 mx-auto mb-4" />
             <p className="text-gray-400 mb-2">
-              Drag and drop your CSV file here, or
+              Drag and drop your CSV or ASPeCt text file here, or
             </p>
             <label className="inline-block">
               <input
                 type="file"
-                accept=".csv"
+                accept=".csv,.txt,*"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -203,6 +279,33 @@ export function Import() {
           </div>
         )}
       </div>
+
+      {/* ASPeCt Cruise Metadata */}
+      {result?.cruiseMeta && (
+        <div className="bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+          <h3 className="text-lg font-semibold text-white mb-4">Cruise Info from File</h3>
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            {result.cruiseMeta.name && (
+              <><dt className="text-gray-400">Name</dt><dd className="text-gray-100">{result.cruiseMeta.name}</dd></>
+            )}
+            {result.cruiseMeta.voyage_vessel && (
+              <><dt className="text-gray-400">Vessel</dt><dd className="text-gray-100">{result.cruiseMeta.voyage_vessel}</dd></>
+            )}
+            {result.cruiseMeta.voyage_leader && (
+              <><dt className="text-gray-400">Voyage Leader</dt><dd className="text-gray-100">{result.cruiseMeta.voyage_leader}</dd></>
+            )}
+            {result.cruiseMeta.captain_name && (
+              <><dt className="text-gray-400">Captain</dt><dd className="text-gray-100">{result.cruiseMeta.captain_name}</dd></>
+            )}
+            {result.cruiseMeta.start_date && (
+              <><dt className="text-gray-400">Start Date</dt><dd className="text-gray-100">{new Date(result.cruiseMeta.start_date).toLocaleDateString()}</dd></>
+            )}
+            {result.cruiseMeta.end_date && (
+              <><dt className="text-gray-400">End Date</dt><dd className="text-gray-100">{new Date(result.cruiseMeta.end_date).toLocaleDateString()}</dd></>
+            )}
+          </dl>
+        </div>
+      )}
 
       {/* Preview Results */}
       {result && (

@@ -1,12 +1,22 @@
 import Papa from 'papaparse';
-import type { CruiseObservation } from '../db/database';
+import type { CruiseObservation, IceObservation } from '../db/database';
 import { SyncStatus } from '../db/database';
+
+export interface AspectCruiseMeta {
+  name?: string;
+  voyage_leader?: string;
+  captain_name?: string;
+  voyage_vessel?: string;
+  start_date?: string;
+  end_date?: string;
+}
 
 export interface ImportResult {
   success: boolean;
   imported: number;
   errors: string[];
   observations: Partial<CruiseObservation>[];
+  cruiseMeta?: AspectCruiseMeta;
 }
 
 export interface CsvRow {
@@ -112,7 +122,6 @@ function parseObservationRow(row: CsvRow): Partial<CruiseObservation> {
     longitude: lon,
     syncStatus: SyncStatus.LOCAL,
     localChanges: 1,
-    ice_observations: [],
   };
 
   // Optional numeric fields
@@ -250,4 +259,194 @@ export function generateSampleCsv(): string {
   ].join('\n');
 
   return csvContent;
+}
+
+/**
+ * Detect whether a file is CSV or ASPeCt text format.
+ * ASPeCt files follow the naming convention YYYYMMDDVVNNN (e.g. 20260101SD056)
+ * or contain the ---OBSERVATIONS--- marker.
+ */
+export function detectFileFormat(filename: string, content: string): 'csv' | 'aspect' {
+  if (/^\d{8}[A-Za-z]{2}\d+$/.test(filename)) {
+    return 'aspect';
+  }
+  if (filename.toLowerCase().endsWith('.csv')) {
+    return 'csv';
+  }
+  if (content.includes('---OBSERVATIONS---')) {
+    return 'aspect';
+  }
+  return 'csv';
+}
+
+/**
+ * Parse an ASPeCt text file.
+ * Format:
+ *   Line 1: JSON object with cruise metadata
+ *   Line 2: ---OBSERVATIONS---
+ *   Line 3: semicolon-delimited header row
+ *   Lines 4+: semicolon-delimited data rows (empty fields = missing value)
+ */
+export function parseAspectTextFile(content: string): ImportResult {
+  const result: ImportResult = {
+    success: false,
+    imported: 0,
+    errors: [],
+    observations: [],
+  };
+
+  const lines = content.split('\n');
+  let headerFields: string[] = [];
+  let inObservations = false;
+  let headerParsed = false;
+
+  lines.forEach((line, lineIndex) => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    // Line 0: JSON cruise metadata
+    if (lineIndex === 0 && trimmed.startsWith('{')) {
+      try {
+        result.cruiseMeta = JSON.parse(trimmed) as AspectCruiseMeta;
+      } catch {
+        result.errors.push('Line 1: Failed to parse cruise metadata JSON');
+      }
+      return;
+    }
+
+    if (trimmed === '---OBSERVATIONS---') {
+      inObservations = true;
+      return;
+    }
+
+    if (!inObservations) return;
+
+    // First line after the marker is the header row
+    if (!headerParsed) {
+      headerFields = trimmed.split(';');
+      headerParsed = true;
+      return;
+    }
+
+    try {
+      const obs = parseAspectRow(trimmed, headerFields);
+      result.observations.push(obs);
+    } catch (error) {
+      result.errors.push(
+        `Line ${lineIndex + 1}: ${error instanceof Error ? error.message : 'Invalid data'}`
+      );
+    }
+  });
+
+  result.success = result.errors.length === 0;
+  result.imported = result.observations.length;
+  return result;
+}
+
+function parseAspectRow(line: string, headers: string[]): Partial<CruiseObservation> {
+  const values = line.split(';');
+
+  const get = (field: string): string => {
+    const idx = headers.indexOf(field);
+    return idx >= 0 ? (values[idx] ?? '').trim() : '';
+  };
+
+  const getNum = (field: string): number | null => {
+    const v = get(field);
+    if (!v) return null;
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  };
+
+  const dateStr = get('date');
+  const timeStr = get('time');
+  if (!dateStr) throw new Error('date is required');
+
+  const entryDate = new Date(`${dateStr}T${timeStr || '00:00:00'}Z`);
+  if (isNaN(entryDate.getTime())) {
+    throw new Error(`Invalid date/time: ${dateStr} ${timeStr}`);
+  }
+
+  const lat = getNum('latitude');
+  if (lat === null || lat < -90 || lat > 90) {
+    throw new Error(`Invalid latitude: ${get('latitude')}`);
+  }
+
+  const lon = getNum('longitude');
+  if (lon === null || lon < -180 || lon > 180) {
+    throw new Error(`Invalid longitude: ${get('longitude')}`);
+  }
+
+  const observation: Partial<CruiseObservation> = {
+    entry_datetime: entryDate,
+    latitude: lat,
+    longitude: lon,
+    syncStatus: SyncStatus.LOCAL,
+    localChanges: 1,
+  };
+
+  const ct = getNum('total_ice_concentration');
+  if (ct !== null) observation.total_ice_concentration = ct;
+
+  const owt = get('open_water_type');
+  if (owt) observation.open_water_type = owt;
+
+  // Build an IceObservation from ice_observations.N.* fields
+  const buildIceObs = (n: number): IceObservation | undefined => {
+    const p = `ice_observations.${n}.`;
+    const conc = getNum(`${p}ice_concentration`);
+    const type = get(`${p}ice_type`);
+    if (conc === null && !type) return undefined;
+    const ice: IceObservation = {
+      ice_concentration: conc ?? 0,
+      ice_type: type,
+      ice_thickness: get(`${p}ice_thickness`),
+      floe_size: get(`${p}floe_size`),
+      topography: get(`${p}topography`),
+    };
+    const snowType = get(`${p}snow_type`);
+    if (snowType) ice.snow_type = snowType;
+    const snowThick = get(`${p}snow_thickness`);
+    if (snowThick) ice.snow_thickness = snowThick;
+    const brownIce = get(`${p}brown_ice`);
+    if (brownIce) ice.brown_ice = brownIce;
+    const mpCov = getNum(`${p}melt_pond_areal_coverage`);
+    if (mpCov !== null) ice.melt_pond_coverage = mpCov;
+    const mpDepth = getNum(`${p}melt_pond_depth`);
+    if (mpDepth !== null) ice.melt_pond_depth = mpDepth;
+    const mpL1 = getNum(`${p}melt_pond_length_1`);
+    if (mpL1 !== null) ice.melt_pond_length_1 = mpL1;
+    const mpL2 = getNum(`${p}melt_pond_length_2`);
+    if (mpL2 !== null) ice.melt_pond_length_2 = mpL2;
+    return ice;
+  };
+
+  const primary = buildIceObs(1);
+  if (primary) observation.primary_ice = primary;
+  const secondary = buildIceObs(2);
+  if (secondary) observation.secondary_ice = secondary;
+  const tertiary = buildIceObs(3);
+  if (tertiary) observation.tertiary_ice = tertiary;
+
+  const wt = getNum('water_temp');
+  if (wt !== null) observation.water_temp = wt;
+  const at = getNum('air_temp');
+  if (at !== null) observation.air_temp = at;
+  const ws = getNum('wind_speed');
+  if (ws !== null && ws >= 0) observation.wind_speed = ws;
+  const wd = getNum('wind_direction');
+  if (wd !== null && wd >= 0 && wd <= 360) observation.wind_direction = wd;
+  const cloud = getNum('cloud_cover');
+  if (cloud !== null && cloud >= 0 && cloud <= 8) observation.cloud_cover = cloud;
+
+  const vis = get('visibility');
+  if (vis) observation.visibility = vis;
+  const wx = get('weather');
+  if (wx) observation.weather = wx;
+  const obs = get('observer');
+  if (obs) observation.observer = obs;
+  const cmt = get('comments');
+  if (cmt) observation.comments = cmt;
+
+  return observation;
 }
